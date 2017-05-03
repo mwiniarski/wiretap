@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace WindowsStalker
+namespace TestServer
 {
     internal class Program
     {
         public static void Main(string[] args)
         {
-            Connection.StartClient();
+            Server.StartListening();
         }
     }
 }
