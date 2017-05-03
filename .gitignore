@@ -1,2 +1,8 @@
-*.o
+
+#web
 *.pyc
+
+#server
+*.o
+server/build/
+server/server
