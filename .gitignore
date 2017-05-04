@@ -1,5 +1,7 @@
 #WEB
 *.pyc
+web/cpplib/build/
+.sconsign.dblite
 
 #SERVER
 *.o

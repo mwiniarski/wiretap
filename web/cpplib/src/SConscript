@@ -1,0 +1,6 @@
+# -*- python -*-
+Import('env')
+
+cpplib = env.SharedLibrary('hello', ['main.cpp'])
+
+Return('cpplib')

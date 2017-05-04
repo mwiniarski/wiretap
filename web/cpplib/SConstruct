@@ -1,0 +1,18 @@
+def copyLibBuilder( target, source, env):
+   import shutil
+   shutil.copy( str(source[0]), str(target[0]) )
+   return
+
+env = Environment(CC = 'gcc-6', CXX = 'g++-6')
+env['FRAMEWORKS'] += ['Python']
+Export('env')
+
+env.Append( CPPPATH = [Dir('/Library/Frameworks/Python.framework/Versions/3.6/include/python3.6m')])
+env.Append( LIBPATH = [Dir('/Library/Frameworks/Python.framework/Versions/3.6/lib')])
+env.Append( CPPFLAGS = '-Wall -pedantic -pthread --std=c++14' )
+env.Append( LINKFLAGS = '-Wall -pthread --std=c++14' )
+env.Append( LIBS = [ 'boost_python3-mt'] )
+
+cpplib = SConscript('src/SConscript', variant_dir='build/', duplicate=0)
+
+Command('hello.so', cpplib, copyLibBuilder)
