@@ -41,6 +41,10 @@ namespace TestServer
                     Socket handler = listener.Accept();
                     data = null;
 
+                    handler.Shutdown(SocketShutdown.Both);
+                    handler.Close();
+                    return;
+
                     // An incoming connection needs to be processed.
                     while (true)
                     {

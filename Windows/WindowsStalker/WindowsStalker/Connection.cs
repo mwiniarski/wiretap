@@ -27,7 +27,7 @@ namespace WindowsStalker
                     Console.WriteLine("Socket connected to {0}",
                         socket.RemoteEndPoint.ToString());
 
-                    byte[] msg = Encoding.ASCII.GetBytes("This is a test<EOF>");
+                    byte[] msg = Encoding.ASCII.GetBytes("Hello man!");
                     int bytesSent = socket.Send(msg);
                     int bytesRec = socket.Receive(bytes);
                     Console.WriteLine("Echoed test = {0}",
@@ -43,7 +43,8 @@ namespace WindowsStalker
                 }
                 catch (SocketException se)
                 {
-                    Console.WriteLine("SocketException : {0}",se.ToString());
+                    //Handle connection lost here
+                    Console.WriteLine("Connection lost");
                 }
                 catch (Exception e)
                 {
