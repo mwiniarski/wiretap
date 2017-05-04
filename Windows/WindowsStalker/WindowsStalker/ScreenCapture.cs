@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
 
@@ -23,6 +24,14 @@ namespace WindowsStalker
 
             //TODO hash this
             bmpScreenshot.Save("Screenshot.png", ImageFormat.Png);
+            SendFile("xd");
+        }
+
+        public static bool SendFile(string tmpFilePath)
+        {
+            //TODO implement
+            Console.WriteLine("screenshot sent");
+            return true;
         }
     }
 }

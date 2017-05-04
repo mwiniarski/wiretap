@@ -1,14 +1,31 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Management;
+using System.Threading;
 
 namespace WindowsStalker
 {
     public class Program
     {
+        private Thread _scheduleThread;
+
         public static void Main(string[] args)
         {
             Scheduler scheduler = new Scheduler();
+            scheduler.StartScheduling();
+
+            Stopwatch s = new Stopwatch();
+            s.Start();
+
+            while (true)
+            {
+                if (s.Elapsed > TimeSpan.FromSeconds(45))
+                {
+                    scheduler.UpdateConfiguration(15, 15);
+                    s.Stop();
+                    break;
+                }
+            }
         }
 
         public static string GetComputerID()
@@ -23,6 +40,11 @@ namespace WindowsStalker
             }
 
             return id;
+        }
+
+        public void ApplyNewConfig()
+        {
+
         }
     }
 }
