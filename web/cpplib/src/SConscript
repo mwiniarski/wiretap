@@ -1,6 +1,6 @@
 # -*- python -*-
 Import('env')
 
-cpplib = env.SharedLibrary('hello', ['main.cpp'])
+cpplib = env.SharedLibrary('hello', Glob("*.cpp"))
 
 Return('cpplib')
