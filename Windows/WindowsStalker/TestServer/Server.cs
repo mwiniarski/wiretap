@@ -10,17 +10,19 @@ namespace TestServer
         // Incoming data from the client.
         public static string data = null;
 
-        public static void StartListening()
-        {
+        public static void StartListening() {
             // Data buffer for incoming data.
-            byte[] bytes = new byte[1024];
+            byte[] bytes = new Byte[1024];
+            int portNumber = 11000;
+            Mode serverMode = Mode.ECHO;
 
             // Establish the local endpoint for the socket.
             // Dns.GetHostName returns the name of the
             // host running the application.
             IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
             IPAddress ipAddress = ipHostInfo.AddressList[0];
-            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, 11000);
+            IPEndPoint localEndPoint = new IPEndPoint(ipAddress, portNumber);
+
 
             // Create a TCP/IP socket.
             Socket listener = new Socket(AddressFamily.InterNetwork,
@@ -28,45 +30,40 @@ namespace TestServer
 
             // Bind the socket to the local endpoint and
             // listen for incoming connections.
-            try
-            {
+            try {
                 listener.Bind(localEndPoint);
                 listener.Listen(10);
 
-                // Start listening for connections.
-                while (true)
-                {
-                    Console.WriteLine("Waiting for a connection on " + localEndPoint + " ...");
-                    // Program is suspended while waiting for an incoming connection.
-                    Socket handler = listener.Accept();
-                    data = null;
+            // Start listening for connections.
 
-                    handler.Shutdown(SocketShutdown.Both);
-                    handler.Close();
-                    return;
+                Console.WriteLine("Waiting for a connection... at " + ipAddress + " " +  portNumber);
+                // Program is suspended while waiting for an incoming connection.
+                Socket handler = listener.Accept();
+                Console.WriteLine("Connection accepted");
+                data = null;
 
-                    // An incoming connection needs to be processed.
-                    while (true)
+                // An incoming connection needs to be processed.
+                while (true) {
+                    if (serverMode == Mode.ECHO)
                     {
                         bytes = new byte[1024];
                         int bytesRec = handler.Receive(bytes);
-                        data += Encoding.ASCII.GetString(bytes,0,bytesRec);
-                        if (data.IndexOf("<EOF>") > -1)
-                        {
-                            break;
-                        }
+                        data = Encoding.ASCII.GetString(bytes,0,bytesRec);
+
+                        // Show the data on the console.
+                        Console.WriteLine( "Text received : {0}", data);
+                        // Echo the data back to the client.
+                        byte[] msg = Encoding.ASCII.GetBytes(data);
+                        handler.Send(msg);
+                    }
+                    else if (serverMode == Mode.DISCONNECT)
+                    {
+                        break;
                     }
 
-                    // Show the data on the console.
-                    Console.WriteLine( "Text received : {0}", data);
-
-                    // Echo the data back to the client.
-                    byte[] msg = Encoding.ASCII.GetBytes(data);
-
-                    handler.Send(msg);
-                    handler.Shutdown(SocketShutdown.Both);
-                    handler.Close();
                 }
+                handler.Shutdown(SocketShutdown.Both);
+                handler.Close();
 
             } catch (Exception e) {
                 Console.WriteLine(e.ToString());
@@ -74,6 +71,7 @@ namespace TestServer
 
             Console.WriteLine("\nPress ENTER to continue...");
             Console.Read();
+
         }
     }
 }

