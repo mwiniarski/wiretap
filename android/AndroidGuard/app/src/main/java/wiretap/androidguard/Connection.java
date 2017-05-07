@@ -75,7 +75,8 @@ public class Connection implements Runnable{
         DataInputStream dataInputStream = null;
         try {
             dataInputStream = new DataInputStream(soc.getInputStream());
-            dataInputStream.readFully(bytes, 0, bytes.length);
+            //dataInputStream.readFully(bytes, 0, bytes.length);
+            dataInputStream.read(bytes);
             //dataInputStream.close();
             return bytes;
         } catch (IOException e) {

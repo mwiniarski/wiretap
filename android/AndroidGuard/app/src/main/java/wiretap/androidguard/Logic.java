@@ -9,10 +9,11 @@ public class Logic implements Runnable {
         Thread listeningThread = new Thread(connection, "listen");
         listeningThread.start();
 
-        String sampleMessageString = "Hello there!<EOF>";
+        String sampleMessageString = "Hello there!";
         try {
             byte[] sampleMessage = sampleMessageString.getBytes("US-ASCII");
             connection.sendMessage(sampleMessage);
+            //connection.sendMessage(sampleMessage);
             //connection.sendMessage(sampleMessage);
             //connection.sendMessage(sampleMessage);
         } catch (UnsupportedEncodingException e) {
