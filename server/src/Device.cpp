@@ -1,27 +1,19 @@
 #include "Device.h"
 
 Device::Device(int socket_, sockaddr_in a_)
-    :connection(socket_, a_)
+    :serializer(socket_, a_)
 {}
 
 void Device::operator()(){
-    const int BUFFER_SIZE = 256;
 
-    char buffer[BUFFER_SIZE];
-    while(true) {
-        memset(buffer, 0, BUFFER_SIZE);
-        int messageSize;
-        // read
-        try{
-            messageSize = connection.getMessage(buffer, BUFFER_SIZE);
-        } catch(std::exception& e) {
+    std::string file;
+    for(int i=0;i < 1000; i++) {
+        file = "file" + std::to_string(i);
+        try {
+            serializer.getMessage(file.c_str());
+        } catch(std::logic_error &e) {
             break;
         }
-
-        // write
-        connection.sendMessage(buffer, messageSize);
-
     }
-
 
 }

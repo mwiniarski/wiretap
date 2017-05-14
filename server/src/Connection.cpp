@@ -2,7 +2,12 @@
 
 Connection::Connection(int socket_, sockaddr_in a_)
     :address(a_), socket(socket_)
-{}
+{
+    FD_ZERO(&readSet);
+    FD_ZERO(&writeSet);
+    FD_SET(socket, &readSet);
+    FD_SET(socket, &writeSet);
+}
 
 sockaddr_in Connection::getAddress() {
     return address;
@@ -10,22 +15,31 @@ sockaddr_in Connection::getAddress() {
 
 //send message to client
 void Connection::sendMessage(char * message, int length){
-	send(socket, message, length, 0);
+    //select() przed sendem - check this
+    send(socket, message, length, 0);
 }
 
 //get message from client - blocking!
-int Connection::getMessage(char * message, int length){
+void Connection::getMessage(char * message, int length, int timeout){
 
-	//happens when client exits application or connation fails
-    int bytesReceived = recv(socket, message, length, 0);
+    int bytes = 0;
+    timeval tv;
+    tv.tv_sec = timeout;
+    tv.tv_uses = 0; 
 
-    if (bytesReceived <= 0){
-		throwError("receiving");
-	}
+    while(bytes != length) {
+        int result = select(socket+1, &readSet, NULL, NULL, )
+        timeout ++;
+        int received = recv(socket, message, length, 0);
+        bytes += received;
 
-    return bytesReceived;
+        //happens when client exits application or connation fails
+        if (received < 0){
+            throwError("receiving");
+        }
+    }
 }
 
 void Connection::throwError(std::string msg) {
-    throw std::runtime_error("Connection error on: " + msg );
+    throw std::logic_error("Connection error on: " + msg );
 }

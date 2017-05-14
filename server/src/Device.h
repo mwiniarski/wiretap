@@ -1,7 +1,7 @@
 #ifndef DEVICE_H_
 #define DEVICE_H_
 
-#include "Connection.h"
+#include "Serializer.h"
 
 #include <memory>
 #include <cstring>
@@ -13,7 +13,8 @@ public:
 
     void operator()();
 private:
-    Connection connection;
+
+    Serializer serializer;
 };
 
 #endif // DEVICE_H_
