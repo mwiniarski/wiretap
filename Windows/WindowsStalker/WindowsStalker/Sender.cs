@@ -189,6 +189,7 @@ namespace WindowsStalker
 
         public void CloseConnection()
         {
+            Console.WriteLine("Socket connection closing...");
             _socket.Shutdown(SocketShutdown.Both);
             _socket.Close();
         }

