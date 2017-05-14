@@ -3,6 +3,8 @@
     public enum Mode
     {
         ECHO,
-        DISCONNECT
+        DISCONNECT,
+        ACK,
+        ACK_DISCONNECT
     }
 }

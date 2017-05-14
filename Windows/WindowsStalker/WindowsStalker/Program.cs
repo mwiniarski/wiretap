@@ -26,16 +26,31 @@ namespace WindowsStalker
 //                    break;
 //                }
 //            }
+//          local Winiar - 192.168.0.199 : 8888
 //          test host -  192.168.0.101 : 11000, remote host - 37.233.98.52 : 8888
-            Connection connection = new Connection("192.168.0.101", 11000);
-            connection.StartClient();
-            Thread listeningThread = new Thread(connection.Listen);
-            listeningThread.Start();
+//            bool Winiar = false;
+//            Sender sender;
+//            if (Winiar)
+//            {
+//                sender = new Sender("192.168.0.199", 8888);
+//            }
+//            else
+//            {
+//                sender = new Sender("192.168.0.101", 11000);
+//            }
+//
+//            sender.StartSender();
+//            Thread listeningThread = new Thread(sender.Listen);
+//            listeningThread.Start();
+//
+//            //sample echo message
+//            byte[] sampleMessage = Encoding.ASCII.GetBytes("Hello man!<EOF>");
+//            sender.SendFrame(sampleMessage);
+//            sender.SendFrame(sampleMessage);
 
-            //sample echo message
-            byte[] sampleMessage = Encoding.ASCII.GetBytes("Hello man!<EOF>");
-            connection.SendMessage(sampleMessage);
-            connection.SendMessage(sampleMessage);
+            Serializer s = new Serializer();
+            var toSent = s.SplitFile();
+            s.SendSplitedFile(toSent);
 
         }
 

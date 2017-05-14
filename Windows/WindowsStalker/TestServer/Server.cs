@@ -14,7 +14,7 @@ namespace TestServer
             // Data buffer for incoming data.
             byte[] bytes = new Byte[1024];
             int portNumber = 11000;
-            Mode serverMode = Mode.ECHO;
+            Mode serverMode = Mode.DISCONNECT;
 
             // Establish the local endpoint for the socket.
             // Dns.GetHostName returns the name of the
@@ -55,6 +55,33 @@ namespace TestServer
                         // Echo the data back to the client.
                         byte[] msg = Encoding.ASCII.GetBytes(data);
                         handler.Send(msg);
+                        //break;
+                    }
+                    else if (serverMode == Mode.ACK)
+                    {
+                        bytes = new byte[1024];
+                        int bytesRec = handler.Receive(bytes);
+                        data = Encoding.ASCII.GetString(bytes,0,bytesRec);
+
+                        // Show the data on the console.
+                        Console.WriteLine( "Text received : {0}", data);
+                        // Echo the data back to the client.
+                        byte[] msg = {1};
+                        handler.Send(msg);
+                        //break;
+                    }
+                    else if (serverMode == Mode.ACK_DISCONNECT)
+                    {
+                        bytes = new byte[1024];
+                        int bytesRec = handler.Receive(bytes);
+                        data = Encoding.ASCII.GetString(bytes,0,bytesRec);
+
+                        // Show the data on the console.
+                        Console.WriteLine( "Text received : {0}", data);
+                        // Echo the data back to the client.
+                        byte[] msg = {1};
+                        handler.Send(msg);
+                        break;
                     }
                     else if (serverMode == Mode.DISCONNECT)
                     {
@@ -62,9 +89,8 @@ namespace TestServer
                     }
 
                 }
-                handler.Shutdown(SocketShutdown.Both);
                 handler.Close();
-
+                //handler.Shutdown(SocketShutdown.Both);
             } catch (Exception e) {
                 Console.WriteLine(e.ToString());
             }
