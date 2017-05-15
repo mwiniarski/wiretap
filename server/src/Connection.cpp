@@ -13,6 +13,13 @@ sockaddr_in Connection::getAddress() {
     return address;
 }
 
+void Connection::setTimeout(int timeout) {
+    timeval tv;
+    tv.tv_sec = timeout;
+    tv.tv_usec = 0;
+    setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv,sizeof(struct timeval));
+}
+
 //send message to client
 void Connection::sendMessage(char * message, int length){
     //select() przed sendem - check this
@@ -20,16 +27,11 @@ void Connection::sendMessage(char * message, int length){
 }
 
 //get message from client - blocking!
-void Connection::getMessage(char * message, int length, int timeout){
+void Connection::getMessage(char * message, int length){
 
     int bytes = 0;
-    timeval tv;
-    tv.tv_sec = timeout;
-    tv.tv_uses = 0; 
 
     while(bytes != length) {
-        int result = select(socket+1, &readSet, NULL, NULL, )
-        timeout ++;
         int received = recv(socket, message, length, 0);
         bytes += received;
 

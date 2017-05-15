@@ -39,7 +39,7 @@ private:
 
 public:
     void sendMessage();
-    void getMessage(const char* file);
+    std::string getMessage(FILE *fp, const char* file);
 };
 
 #endif //SERIALIZER_H_

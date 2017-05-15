@@ -11,7 +11,8 @@ public:
     Connection(int socket_, sockaddr_in a_);
 
     void sendMessage(char * message, int length);
-    void getMessage(char * message, int length, int timeout);
+    void getMessage(char * message, int length);
+    void setTimeout(int timeout);
 
     sockaddr_in getAddress();
 private:
