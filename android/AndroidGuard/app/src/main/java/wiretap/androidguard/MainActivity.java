@@ -15,6 +15,11 @@ public class MainActivity extends AppCompatActivity {
 
         Thread logical = new Thread(logic, "logic");
         logical.start();
-
+//tu tez join
+        try {
+            logical.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

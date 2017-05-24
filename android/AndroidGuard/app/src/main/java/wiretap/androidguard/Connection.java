@@ -14,11 +14,12 @@ import java.net.UnknownHostException;
 /**
  * Created by H.Jatkowski on 2017-05-07.
  */
-public class Connection implements Runnable{
-    private Socket soc;
+public class Connection /*implements Runnable*/{
+    /*private Socket soc;
     private int reconnectTimeout = 1;
     private InetAddress inetAddress;
     private int port;
+    private Boolean run = true;
 
     public Connection(String ipAddress, int _port) {
         try {
@@ -30,13 +31,17 @@ public class Connection implements Runnable{
         }
     }
 
+    public Connection() {
+        this("192.168.0.199", 8888);
+    }
+
     public void startClient() {
         soc = new Socket();
 
-        establish();
+        establishConnection();
     }
 
-    public void establish() {
+    public void establishConnection() {
         try {
             Log.i("CON", "Connecting...");
             soc.connect(new InetSocketAddress(inetAddress, port));
@@ -70,13 +75,17 @@ public class Connection implements Runnable{
         }
     }
 
-    public byte[] getMessage() {
-        byte[] bytes = new byte[1024];
+    public byte[] getMessage(int length) {
+        byte[] bytes = new byte[length];
         DataInputStream dataInputStream = null;
         try {
+            int bytesReceived = 0;
+
             dataInputStream = new DataInputStream(soc.getInputStream());
             //dataInputStream.readFully(bytes, 0, bytes.length);
-            dataInputStream.read(bytes);
+            while(bytesReceived!=length) {
+                bytesReceived+=dataInputStream.read(bytes);
+            }
             //dataInputStream.close();
             return bytes;
         } catch (IOException e) {
@@ -96,8 +105,8 @@ public class Connection implements Runnable{
     }
 
     public void listen() {
-        while(true) {
-            byte[] message = getMessage();
+        while(run) {
+            byte[] message = getMessage(256);
             if(message != null)
                 handleMessage(message);
             else {
@@ -118,4 +127,8 @@ public class Connection implements Runnable{
     public void run() {
         listen();
     }
+
+    public void setRun(Boolean value) {
+        run = value;
+    }*/
 }
