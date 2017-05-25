@@ -1,0 +1,58 @@
+{% load staticfiles %}
+
+<head>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+  <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Indie+Flower|Open+Sans" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<div class="page-header">
+  <blockquote class="blockquote">
+    <h1>Stalker manager</h1>
+    <footer>Check in. Relax. Take a shower</footer>
+  </blockquote>
+</div>
+<div class="content container">
+
+  <form action="" method="post" class="form-horizontal">
+    {% csrf_token %}
+
+
+    <div class="form-group">
+      <label class="control-label col-sm-2" for="name">Nazwa:</label>
+      <div class="col-sm-10">
+        <input type="text" class="form-control" id="name" placeholder={{ form.visible_fields.3 }} </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2" for="status">Status:</label>
+        <div class="col-sm-10">
+          <input type="status" class="form-control" id="status" placeholder={{ form.visible_fields.2 }} </div>
+      </div>
+        <div class="form-group">
+          <label class="control-label col-sm-2" for="uuid">Uuid:</label>
+          <div class="col-sm-10">
+            <input type="uuid" class="form-control" id="uuid" placeholder={{ form.visible_fields.0 }} </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="device_type">Typ:</label>
+            <div class="col-sm-10">
+              <input type="device_type" class="form-control" id="device_type" placeholder={{ form.visible_fields.1 }} </div>
+            </div>
+            <div class="form-group">
+              <label class="control-label col-sm-2" for="send_cycle_1">Cykl 1:</label>
+              <div class="col-sm-10">
+                <input type="send_cycle_1" class="form-control" id="send_cycle_1" placeholder={{ form.visible_fields.4 }} </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="send_cycle_2">Cykl 2:</label>
+                <div class="col-sm-10">
+                  <input type="send_cycle_2" class="form-control" id="send_cycle_2" placeholder={{ form.visible_fields.5 }} </div>
+                </div>
+
+
+                <input class="btn btn-success" style="margin-left:500" type="submit" value="Update" name="iii" />
+  </form>
+  </div>

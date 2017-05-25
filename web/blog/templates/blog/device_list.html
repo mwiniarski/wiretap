@@ -1,0 +1,26 @@
+{% load staticfiles %}
+
+<head>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+  <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Indie+Flower|Open+Sans" rel="stylesheet">
+</head>
+
+<div class="page-header">
+  <blockquote class="blockquote">
+    <h1>Stalker manager</h1>
+    <footer>She was young. She was beautiful. She was next.</footer>
+  </blockquote>
+</div>
+
+
+
+<div class="content container">
+  <div>
+    <h2>Lista urządzeń</h2> {% for device in devices %}
+    <x> <a href="/device/{{ device.id }}"><span class="text-important">{{ device.name }}</span></a> {% if device.status == "new" %}
+      <span class="text-danger" style="font-size:20px">new</span> {% endif %}
+    </x><br> {% endfor %}
+  </div>

