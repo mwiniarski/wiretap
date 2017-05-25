@@ -2,6 +2,8 @@ package wiretap.androidguard;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
+import android.util.Log;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -10,6 +12,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Util.setCurrentAndroidID(Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID));
+        Util.setPackageManager(getPackageManager());
 
         Logic logic = new Logic();
 
@@ -20,6 +25,8 @@ public class MainActivity extends AppCompatActivity {
             logical.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
+        } finally {
+            //logic.shutdown();
         }
     }
 }
