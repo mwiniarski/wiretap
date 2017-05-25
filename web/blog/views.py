@@ -7,6 +7,7 @@ from django.views.generic.edit import CreateView
 from .forms import DeviceCreate
 from django.views.generic.edit import UpdateView
 from django.core.urlresolvers import reverse_lazy
+from cpplib import hello
 class DeviceUpdate(UpdateView):
     model = Device
     fields = '__all__'
@@ -27,7 +28,8 @@ def device_list(request):
     new_devices = list(Device.objects.filter(status='new'))
     rest_devices = list(Device.objects.filter(status='active'))
     devices = new_devices + rest_devices
-    return render(request, 'blog/device_list.html', {'devices': devices})
+    lol = hello.greet()
+    return render(request, 'blog/device_list.html', {'devices': devices, 'lol': lol})
 def post_new(request):
     form = DeviceCreate()
     return render(request, 'blog/device_create.html', {'form': form})
