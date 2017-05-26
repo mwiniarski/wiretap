@@ -2,6 +2,7 @@
 *.pyc
 web/cpplib/build/
 .sconsign.dblite
+web/cpplib/hello.so
 
 #SERVER
 *.o
