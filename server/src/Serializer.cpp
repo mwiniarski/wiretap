@@ -4,9 +4,11 @@ Serializer::Serializer(int socket_, sockaddr_in a_)
     :connection(socket_, a_)
 {}
 
-void Serializer::sendMessage() {}
+void Serializer::sendMessage()
+{}
 
-void Serializer::getFrame(Frame frame) {
+void Serializer::getFrame(Frame frame)
+{
     switch(frame) {
         case Frame::TRANSFER:
             char bufferT[4];
@@ -30,10 +32,12 @@ void Serializer::getFrame(Frame frame) {
             std::copy(bufferP, bufferP + 256, packet.data);
             break;
     }
+
+    sendFrame(Frame::ACK);
 }
 
-void Serializer::sendFrame(Frame frame) {
-
+void Serializer::sendFrame(Frame frame)
+{
     switch(frame) {
         case Frame::TRANSFER:
             break;
@@ -48,12 +52,23 @@ void Serializer::sendFrame(Frame frame) {
     }
 }
 
-std::string Serializer::getMessage(FILE *fp, const char* file) {
+std::string Serializer::acceptDevice()
+{
+    getFrame(Frame::TRANSFER);
+    if(transfer.type != Transfer::Type::REGISTER)
+        throwError("accept device");
 
+    getFrame(Frame::PACKET);
+    
+    std::string uuid(packet.data);
+    return stoi(uuid);
+}
+
+std::string Serializer::getMessage(FILE *fp, const char* file)
+{
     //wait for first frame to start connection
     connection.setTimeout(0);
     getFrame(Frame::TRANSFER);
-    sendFrame(Frame::ACK);
 
     std::cout<<transfer.type << " " << transfer.packetCount << " " << (int)transfer.lastPacketSize<< "\n";
 
@@ -64,14 +79,12 @@ std::string Serializer::getMessage(FILE *fp, const char* file) {
     for(short i = 1; i <= transfer.packetCount - 1; i++) {
 
         getFrame(Frame::PACKET);
-        sendFrame(Frame::ACK);
 
         fwrite(packet.data, 1, 256, fp);
     }
 
     //get last packet
     getFrame(Frame::PACKET);
-    sendFrame(Frame::ACK);
 
     fwrite(packet.data, 1, transfer.lastPacketSize, fp);
 
@@ -79,4 +92,8 @@ std::string Serializer::getMessage(FILE *fp, const char* file) {
 
     //extension of received file
     return ".png";
+}
+
+void Serializer::throwError(std::string msg) {
+    throw std::logic_error("Serialization error on: " + msg );
 }

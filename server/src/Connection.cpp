@@ -2,12 +2,7 @@
 
 Connection::Connection(int socket_, sockaddr_in a_)
     :address(a_), socket(socket_)
-{
-    FD_ZERO(&readSet);
-    FD_ZERO(&writeSet);
-    FD_SET(socket, &readSet);
-    FD_SET(socket, &writeSet);
-}
+{}
 
 sockaddr_in Connection::getAddress() {
     return address;

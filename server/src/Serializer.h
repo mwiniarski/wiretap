@@ -29,17 +29,17 @@ private:
     } ack;
 
     struct Packet {
-        unsigned char data[256];
+        char data[256];
     } packet;
 
     void sendFrame(Frame frame);
     void getFrame(Frame frame);
-
     Connection connection;
-
+    void throwError(std::string);
 public:
     void sendMessage();
     std::string getMessage(FILE *fp, const char* file);
+    int acceptDevice();
 };
 
 #endif //SERIALIZER_H_

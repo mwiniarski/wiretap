@@ -1,7 +1,7 @@
 # -*- python -*-
 Import('env')
 
-lib = env.StaticLibrary('lib', ['Connection.cpp', 'Manager.cpp', 'Device.cpp', 'Serializer.cpp'])
+lib = env.StaticLibrary('lib', ['Connection.cpp', 'Manager.cpp', 'Device.cpp', 'Serializer.cpp', 'DbManager.cpp'])
 
 env.BoostTests(Glob('tests/*.cpp'), lib)
 

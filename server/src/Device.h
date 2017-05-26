@@ -2,9 +2,11 @@
 #define DEVICE_H_
 
 #include "Serializer.h"
+#include "DbManager.h"
 
 #include <memory>
 #include <cstring>
+#include <iostream>
 
 class Device
 {
@@ -13,8 +15,8 @@ public:
 
     void operator()();
 private:
-
     Serializer serializer;
+    DbManager database;
 };
 
 #endif // DEVICE_H_
