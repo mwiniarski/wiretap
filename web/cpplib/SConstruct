@@ -7,11 +7,17 @@ env = Environment(CC = 'gcc-6', CXX = 'g++-6')
 env['FRAMEWORKS'] += ['Python']
 Export('env')
 
-env.Append( CPPPATH = [Dir('/Library/Frameworks/Python.framework/Versions/3.6/include/python3.6m')])
-env.Append( LIBPATH = [Dir('/Library/Frameworks/Python.framework/Versions/3.6/lib')])
+import platform
+if(platform.system() == 'Linux'):
+    env.Append( CPPPATH = [Dir('/usr/include/python3.5')])
+    env.Append( LIBS = [ 'boost_python-py35'])
+else:
+    env.Append( CPPPATH = [Dir('/Library/Frameworks/Python.framework/Versions/3.6/include/python3.6m')])
+    env.Append( LIBPATH = [Dir('/Library/Frameworks/Python.framework/Versions/3.6/lib')])
+    env.Append( LIBS = [ 'boost_python3-mt'] )
+
 env.Append( CPPFLAGS = '-Wall -pedantic -pthread --std=c++14' )
 env.Append( LINKFLAGS = '-Wall -pthread --std=c++14' )
-env.Append( LIBS = [ 'boost_python3-mt'] )
 
 cpplib = SConscript('src/SConscript', variant_dir='build/', duplicate=0)
 
