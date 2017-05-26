@@ -5,4 +5,4 @@ DB_USER = 'master'
 DB_PASSWORD = 'master'
 
 # files folder
-FILES_ROOT = '/root/files'
+FILES_ROOT = '/root/wiretap/files'
