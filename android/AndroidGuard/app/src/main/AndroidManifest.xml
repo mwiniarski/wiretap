@@ -10,6 +10,7 @@
     </uses-permission>
     <uses-permission android:name="android.permission.CAMERA">
     </uses-permission>
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <uses-feature android:name="android.hardware.camera"/>
     <uses-feature android:name="android.hardware.camera.autofocus"/>
@@ -29,6 +30,15 @@
             </intent-filter>
         </activity>
         <activity android:name=".MakePhotoActivity">
+        </activity>
+
+        <service
+                android:name=".ScheduleService"
+                android:enabled="true"
+                android:exported="true">
+        </service>
+
+        <activity android:name=".MakeAudioActivity">
         </activity>
     </application>
 

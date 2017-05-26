@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
         } finally {
             //logic.shutdown();
         }*/
-        Intent intent = new Intent(this, MakePhotoActivity.class);
+        Intent intent = new Intent(this, MakeAudioActivity.class);
         startActivity(intent);
 
     }
