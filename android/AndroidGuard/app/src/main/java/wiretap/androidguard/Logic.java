@@ -39,7 +39,7 @@ public class Logic implements Runnable {
             e.printStackTrace();
             Log.e("Logic", "The serializer could not put the file through!");
         }*/
-        Photographer.getNewPhoto();
+
     }
 
     public void shutdown() {

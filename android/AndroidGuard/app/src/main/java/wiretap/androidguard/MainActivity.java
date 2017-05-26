@@ -1,5 +1,6 @@
 package wiretap.androidguard;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
@@ -16,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
         Util.setCurrentAndroidID(Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID));
         Util.setPackageManager(getPackageManager());
 
-        Logic logic = new Logic();
+        /*Logic logic = new Logic();
 
         Thread logical = new Thread(logic, "logic");
         logical.start();
@@ -27,6 +28,9 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         } finally {
             //logic.shutdown();
-        }
+        }*/
+        Intent intent = new Intent(this, MakePhotoActivity.class);
+        startActivity(intent);
+
     }
 }
