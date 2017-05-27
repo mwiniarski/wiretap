@@ -22,10 +22,7 @@ int main(int argc, char** argv) {
         cout << "Wrong arguments!" << endl;
         return 0;
     }
-
-    DbManager d;
-    d.connect();
-
+    
     short port = atoi(argv[1]);
 
     Manager manager(port, port+1);
