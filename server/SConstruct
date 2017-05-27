@@ -5,7 +5,7 @@ def initial_scons_config():
     Decider('MD5-timestamp')
 
 def add_special_methods(env):
-    boost_libs = ['boost_unit_test_framework-mt']
+    boost_libs = ['boost_unit_test_framework']
     boost_defines = ['BOOST_TEST_DYN_LINK']
 
     def run_unit_test(env, target, source):
@@ -31,7 +31,6 @@ def create_env():
     Export('env')
     env.Append(CCFLAGS=['-Wall', '-Wextra', '-Wpedantic', '-Wno-deprecated',
                         '--std=c++14', '-O2'])
-    env.Append(LINKFLAGS=['-lpqxx','-lpq'])
     return env
 
 def build_executable(env):
