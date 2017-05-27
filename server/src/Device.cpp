@@ -4,9 +4,36 @@ Device::Device(int socket_, sockaddr_in a_)
     :serializer(socket_, a_)
 {}
 
-void Device::operator()(){
+std::string Device::getTimestamp()
+{
+    using namespace std::chrono;
 
-    int uuid;
+    int ret = duration_cast<milliseconds>
+    (system_clock::now().time_since_epoch()).count();
+
+    return std::to_string(ret);
+}
+
+std::string getPath()
+{
+    std::ifstream config("../web/config.py");
+    std::string line;
+
+    while(std::getline(config, line)) {
+        if(line.substr(0,10) == "FILES_ROOT") {
+            int pos = line.find("'");
+            int end = line.find_last_of("'");
+            line = line.substr(pos+1,end-pos-1);
+            break;
+        }
+    }
+
+    return line;
+}
+
+void Device::operator()()
+{
+    int uuid = 0;
     try {
         uuid = serializer.acceptDevice();
 
@@ -16,26 +43,26 @@ void Device::operator()(){
     }
 
     database.connect();
-    if(!database.isAccepted(uuid)) {
+    id = database.isAccepted(uuid, "mobile");
+    if(id == 0) {
         database.disconnect();
         return;
     }
 
-    //TODO: Do bazy to ma sie zapisywać
-    std::string file, ext;
-    for(int i = 0 ; i < 1000; i++) {
-        file = "file" + std::to_string(i);
-        FILE *fp = nullptr;
+    std::string path = getPath() + std::to_string(uuid) + "/";
+    std::string file = getTimestamp();
 
-        try {
-            ext = serializer.getMessage(fp, file.c_str());
-        } catch(std::logic_error &e) {
-            fclose(fp);
-            break;
-        }
+    FILE * fp = nullptr;
+
+    try {
+        serializer.getMessage(fp, path, file);
+    } catch(std::logic_error &e) {
         fclose(fp);
-        std::rename(file.c_str(),(file + ext).c_str());
+        std::remove((path + file).c_str());
+        database.disconnect();
+        return;
     }
 
+    database.addFile(id, file);
     database.disconnect();
 }

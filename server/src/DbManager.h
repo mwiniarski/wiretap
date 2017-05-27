@@ -5,17 +5,22 @@
 #include <algorithm>
 #include <string>
 #include <iostream>
+#include <fstream>
 
 class DbManager {
 public:
     DbManager();
+    ~DbManager(){delete connection;}
 
-    bool isAccepted(int uuid, std::string s);
+    int isAccepted(int uuid, std::string s);
+    void addFile(int uuid, std::string s);
     bool connect();
     void disconnect();
 private:
+    void readConfigs();
     std::string generateName(int uuid);
-    std::unique_ptr<pqxx::connection> connection;
+    pqxx::connection * connection;
+    std::string configs[5];
 };
 
 #endif

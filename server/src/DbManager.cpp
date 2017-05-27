@@ -14,47 +14,76 @@ std::string DbManager::generateName(int len) {
     return ret;
 }
 
-bool DbManager::isAccepted(int uuid, std::string deviceType)
+void DbManager::addFile(int id, std::string file)
+{
+    std::string sql = "INSERT INTO blog_file "
+                      "VALUES (DEFAULT, '" +        //id
+                      file + "', "                  //path
+                      "now(), 'P', " +             //timestamp, file_type
+                      std::to_string(id) + ")";    //source_id
+
+    pqxx::work work(*connection);
+    work.exec(sql);
+    work.commit();
+}
+
+int DbManager::isAccepted(int uuid, std::string deviceType)
 {
     std::string sql = "SELECT * FROM blog_device "
                       "WHERE uuid = " + std::to_string(uuid);
 
-    pqxx::work txn(*connection);
-    pqxx::result query = txn.exec(sql);
+    pqxx::work work(*connection);
+    pqxx::result query = work.exec(sql);
 
     //record exists
     if(query.size() == 1) {
         std::string status = query.front()[3].as<std::string>();
         if(status == "active")
-            return true;
+            return query.front()[0].as<int>();
 
-        return false;
+        return 0;
     }
 
     //new device
     sql = "INSERT INTO blog_device "
-          "VALUES (DEFAULT, " +         //id
-          std::to_string(uuid) + ", '" +//uuid
-          deviceType +                  //device_type
+          "VALUES (DEFAULT, " +          //id
+          std::to_string(uuid) + ", '" + //uuid
+          deviceType +                   //device_type
           "', 'new', '" +                //status
-          generateName(16) +            //name
-          "', 10, 10)";                 //send_cycles
+          generateName(16) +             //name
+          "', 10, 10)";                  //send_cycles
 
-    std::cout << sql << std::endl;
-    txn.exec(sql);
-    txn.commit();
+    work.exec(sql);
+    work.commit();
 
-    return false;
+    return 0;
+}
+
+void DbManager::readConfigs(){
+    std::ifstream conf("../web/config.py");
+    std::string line;
+
+    for(int i=0; std::getline(conf, line) && i < 5;) {
+        if(line[0] == '#')
+            continue;
+
+        int pos = line.find("'");
+        int end = line.find_last_of("'");
+        configs[i] = line.substr(pos+1,end-pos-1);
+        i++;
+    }
 }
 
 bool DbManager::connect() {
-    connection = std::make_unique<pqxx::connection>
+    readConfigs();
+
+    connection = new pqxx::connection
                     (
-                        "dbname = wiretap "
-                        "user = master "
-                        "password = master "
-                        "hostaddr = 37.233.98.52 "
-                        "port = 5432"
+                        "dbname = " + configs[0] +
+                        " user = " + configs[1] +
+                        " password = " + configs[2] +
+                        " hostaddr = " + configs[3] +
+                        " port = " + configs[4]
                     );
 
     return connection->is_open();
