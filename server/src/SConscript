@@ -5,6 +5,6 @@ lib = env.StaticLibrary('lib', ['Connection.cpp', 'Manager.cpp', 'Device.cpp', '
 
 env.BoostTests(Glob('tests/*.cpp'), lib)
 
-p = env.Program('server', ['main.cpp'] ,LIBS=[lib])
+p = env.Program('server', ['main.cpp'] ,LIBS=[lib]+['pthread','pqxx','pq'])
 
 Return('p')
