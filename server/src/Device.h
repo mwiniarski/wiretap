@@ -6,6 +6,8 @@
 
 #include <memory>
 #include <cstring>
+#include <cstdio>
+#include <chrono>
 #include <iostream>
 
 class Device
@@ -15,6 +17,9 @@ public:
 
     void operator()();
 private:
+    std::string getTimestamp();
+
+    int uuid, id;
     Serializer serializer;
     DbManager database;
 };

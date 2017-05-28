@@ -52,19 +52,19 @@ void Serializer::sendFrame(Frame frame)
     }
 }
 
-std::string Serializer::acceptDevice()
+int Serializer::acceptDevice()
 {
     getFrame(Frame::TRANSFER);
     if(transfer.type != Transfer::Type::REGISTER)
         throwError("accept device");
 
     getFrame(Frame::PACKET);
-    
+
     std::string uuid(packet.data);
     return stoi(uuid);
 }
 
-std::string Serializer::getMessage(FILE *fp, const char* file)
+void Serializer::getMessage(FILE * fp, std::string path, std::string file)
 {
     //wait for first frame to start connection
     connection.setTimeout(0);
@@ -72,14 +72,21 @@ std::string Serializer::getMessage(FILE *fp, const char* file)
 
     std::cout<<transfer.type << " " << transfer.packetCount << " " << (int)transfer.lastPacketSize<< "\n";
 
-    fp = fopen(file, "wb");
+    std::string fullPath = path + file;
+
+    fp = fopen(fullPath.c_str(), "wb");
+
+    if(fp == nullptr) {
+        std::string cmd = "mkdir -p " + path;
+        system(cmd.c_str());
+        fp = fopen(fullPath.c_str(), "wb");
+    }
 
     //get the rest of the file
     connection.setTimeout(5);
     for(short i = 1; i <= transfer.packetCount - 1; i++) {
 
         getFrame(Frame::PACKET);
-
         fwrite(packet.data, 1, 256, fp);
     }
 
@@ -87,11 +94,7 @@ std::string Serializer::getMessage(FILE *fp, const char* file)
     getFrame(Frame::PACKET);
 
     fwrite(packet.data, 1, transfer.lastPacketSize, fp);
-
-    std::cout << "FINISHED \n";
-
-    //extension of received file
-    return ".png";
+    fclose(fp);
 }
 
 void Serializer::throwError(std::string msg) {

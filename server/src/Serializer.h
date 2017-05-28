@@ -3,6 +3,7 @@
 
 #include <string>
 #include <stdexcept>
+#include <chrono>
 #include "Connection.h"
 
 class Serializer
@@ -38,7 +39,7 @@ private:
     void throwError(std::string);
 public:
     void sendMessage();
-    std::string getMessage(FILE *fp, const char* file);
+    void getMessage(FILE *fp, std::string path, std::string file);
     int acceptDevice();
 };
 

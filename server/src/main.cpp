@@ -1,7 +1,20 @@
 #include "Manager.h"
 #include "DbManager.h"
 #include <iostream>
+#include <chrono>
+#include <string>
+#include <fstream>
 using namespace std;
+
+std::string getTimestamp()
+{
+    using namespace std::chrono;
+
+    int ret = duration_cast<milliseconds>
+    (system_clock::now().time_since_epoch()).count();
+
+    return std::to_string(ret);
+}
 
 int main(int argc, char** argv) {
 
@@ -9,16 +22,7 @@ int main(int argc, char** argv) {
         cout << "Wrong arguments!" << endl;
         return 0;
     }
-    cout << "ASDASD" << endl;
-
-    DbManager d;
-
-    if(d.connect())
-        cout << "CONNECTED TO DB" << endl;
-
-    cout << d.isAccepted(111, "mobile") << endl;
-    cout << d.isAccepted(123, "mobile") << endl;
-
+    
     short port = atoi(argv[1]);
 
     Manager manager(port, port+1);
