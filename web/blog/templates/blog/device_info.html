@@ -16,9 +16,6 @@
   </blockquote>
 </div>
 
-<img src="{% static "123/a1b2c3" %}">
-<div class="content container">
-
   <p style="font-size: 30pt;"> {{device.name}}</p>
   <p>Uuid: {{ device.uuid }}</p>
     <form style="display: inline" action="/off/" method="get">
@@ -59,12 +56,13 @@
   {% for picture in pictures %}
 
   <span class="col-sm-4">
-<div class="gallery">
-    <img src="{% static ''%}{{device.uuid}}/{{picture.path}}" width="150" height="150" class="img-thumbnail">
-  <div class="desc">{{picture.timestamp}}</div>
+    <div class="gallery">
+        <a href="{% static ''%}{{device.uuid}}/{{picture.path}}">Plik</a>
+        <img src="{% static ''%}{{device.uuid}}/{{picture.path}}" width="150" height="150" class="img-thumbnail">
+        <div class="desc">{{picture.timestamp}}</div>
+    </div>
 
-
-</div></span> {% endfor %}
+</span> {% endfor %}
   {% for textfile in textfiles %}
   <span class="col-sm-4">
 <div class="gallery">
