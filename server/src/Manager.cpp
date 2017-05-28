@@ -7,7 +7,7 @@ Manager::Manager(short recvPort_, short sendPort_)
 }
 
 void Manager::passControl() {
-
+    //TODO: whatever you want do here ! 
 }
 
 void Manager::acceptIncomingConnections(int i) {

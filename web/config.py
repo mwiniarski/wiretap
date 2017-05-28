@@ -6,4 +6,4 @@ DB_HOST = '37.233.98.52'
 DB_PORT = '5432'
 
 # files folder
-FILES_ROOT = '/root/wiretap/files/'
+FILES_ROOT = '/Users/Michael-Mac/Documents/wiretap/files/'

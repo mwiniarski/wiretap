@@ -33,36 +33,39 @@ std::string getPath()
 
 void Device::operator()()
 {
-    int uuid = 0;
+    std::string uuid;
     try {
         uuid = serializer.acceptDevice();
 
-    }catch(std::logic_error &e) {
+    }catch(std::exception &e) {
         std::cout << e.what() << std::endl;
         return;
     }
 
     database.connect();
-    id = database.isAccepted(uuid, "mobile");
+    id = database.isAccepted(uuid);
     if(id == 0) {
         database.disconnect();
         return;
     }
 
-    std::string path = getPath() + std::to_string(uuid) + "/";
+    std::string path = getPath() + uuid.substr(1) + "/";
     std::string file = getTimestamp();
 
     FILE * fp = nullptr;
-
+    int file_type;
     try {
-        serializer.getMessage(fp, path, file);
+        file_type = serializer.getMessage(fp, path, file);
+
     } catch(std::logic_error &e) {
+        std::cout << e.what() << std::endl;
         fclose(fp);
         std::remove((path + file).c_str());
         database.disconnect();
         return;
     }
 
-    database.addFile(id, file);
+    std::string fileType = database.addFile(id, file, file_type);
+    std::cout << "Dodano plik: " << fileType << std::endl;
     database.disconnect();
 }

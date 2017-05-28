@@ -4,9 +4,6 @@ Serializer::Serializer(int socket_, sockaddr_in a_)
     :connection(socket_, a_)
 {}
 
-void Serializer::sendMessage()
-{}
-
 void Serializer::getFrame(Frame frame)
 {
     switch(frame) {
@@ -52,25 +49,23 @@ void Serializer::sendFrame(Frame frame)
     }
 }
 
-int Serializer::acceptDevice()
+std::string Serializer::acceptDevice()
 {
     getFrame(Frame::TRANSFER);
     if(transfer.type != Transfer::Type::REGISTER)
         throwError("accept device");
 
     getFrame(Frame::PACKET);
-
-    std::string uuid(packet.data);
-    return stoi(uuid);
+    return std::string(packet.data);
 }
 
-void Serializer::getMessage(FILE * fp, std::string path, std::string file)
+int Serializer::getMessage(FILE * fp, std::string path, std::string file)
 {
     //wait for first frame to start connection
     connection.setTimeout(0);
     getFrame(Frame::TRANSFER);
 
-    std::cout<<transfer.type << " " << transfer.packetCount << " " << (int)transfer.lastPacketSize<< "\n";
+    std::cout<< transfer.type << " " << transfer.packetCount << " " << (int)transfer.lastPacketSize<< "\n";
 
     std::string fullPath = path + file;
 
@@ -95,6 +90,12 @@ void Serializer::getMessage(FILE * fp, std::string path, std::string file)
 
     fwrite(packet.data, 1, transfer.lastPacketSize, fp);
     fclose(fp);
+
+
+    if(transfer.type == Transfer::Type::DATA_TYPE1)
+        return 1;
+    else
+        return 2;
 }
 
 void Serializer::throwError(std::string msg) {

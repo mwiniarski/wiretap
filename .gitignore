@@ -1,9 +1,10 @@
 #WEB
 *.pyc
 web/cpplib/build/
+*hello.so
+*config.py
 .sconsign.dblite
-web/cpplib/hello.so
-web/config.py
+
 
 #SERVER
 *.o

@@ -39,8 +39,8 @@ private:
     void throwError(std::string);
 public:
     void sendMessage();
-    void getMessage(FILE *fp, std::string path, std::string file);
-    int acceptDevice();
+    int getMessage(FILE *fp, std::string path, std::string file);
+    std::string acceptDevice();
 };
 
 #endif //SERIALIZER_H_

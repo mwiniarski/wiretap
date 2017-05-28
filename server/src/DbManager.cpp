@@ -14,23 +14,31 @@ std::string DbManager::generateName(int len) {
     return ret;
 }
 
-void DbManager::addFile(int id, std::string file)
+std::string DbManager::addFile(int id, std::string file, int fileType)
 {
+    std::string type = fileType == 1 ? "P" : deviceType == "mobile" ? "A" : "T";
+
     std::string sql = "INSERT INTO blog_file "
-                      "VALUES (DEFAULT, '" +        //id
-                      file + "', "                  //path
-                      "now(), 'P', " +             //timestamp, file_type
+                      "VALUES (DEFAULT, '" +       //id
+                      file + "', "                 //path
+                      "now(), '" +                 //timestamp
+                      type + "', " +          //file_type
                       std::to_string(id) + ")";    //source_id
 
     pqxx::work work(*connection);
     work.exec(sql);
     work.commit();
+
+    return type;
 }
 
-int DbManager::isAccepted(int uuid, std::string deviceType)
+int DbManager::isAccepted(std::string newUuid)
 {
+    char type = newUuid[0];
+    std::string uuid = newUuid.substr(1);
+
     std::string sql = "SELECT * FROM blog_device "
-                      "WHERE uuid = " + std::to_string(uuid);
+                      "WHERE uuid = '" + uuid + "'";
 
     pqxx::work work(*connection);
     pqxx::result query = work.exec(sql);
@@ -38,16 +46,27 @@ int DbManager::isAccepted(int uuid, std::string deviceType)
     //record exists
     if(query.size() == 1) {
         std::string status = query.front()[3].as<std::string>();
+        deviceType = query.front()[2].as<std::string>();
         if(status == "active")
             return query.front()[0].as<int>();
 
+        std::cout << "Device " << uuid << " not accepted!" << std::endl;
         return 0;
     }
 
+    std::cout << "New device: " << uuid << std::endl;
+
     //new device
+    if(type == 'a')
+        deviceType = "mobile";
+    else if (type == 'w')
+        deviceType = "windows";
+    else
+        throwError("wrong device type");
+
     sql = "INSERT INTO blog_device "
-          "VALUES (DEFAULT, " +          //id
-          std::to_string(uuid) + ", '" + //uuid
+          "VALUES (DEFAULT, '" +         //id
+          uuid + "', '" +      //uuid
           deviceType +                   //device_type
           "', 'new', '" +                //status
           generateName(16) +             //name
@@ -87,6 +106,10 @@ bool DbManager::connect() {
                     );
 
     return connection->is_open();
+}
+
+void DbManager::throwError(std::string msg) {
+    throw std::logic_error("Database error on: " + msg );
 }
 
 void DbManager::disconnect()

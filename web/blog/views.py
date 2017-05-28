@@ -17,12 +17,11 @@ class DeviceUpdate(UpdateView):
     template_name_suffix = '_update_form'
     def get_object(self, *args, **kwargs):
         device = get_object_or_404(Device, pk=self.kwargs['pk'])
-        lol = hello.greet2(self.kwargs['pk'])
         return device
     def get_success_url(self, *args, **kwargs):
         device = get_object_or_404(Device, pk=self.kwargs['pk'])
-        lol = hello.greet2(self.kwargs['pk'])
         return reverse("xxx", kwargs={'pk':self.kwargs['pk']})
+    
 
     #     def dispatch(self, request, *args, **kwargs):
     #         if self.get_object().car_owner != "sometext":
