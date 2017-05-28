@@ -6,13 +6,27 @@ from .models import File
 from django.views.generic.edit import CreateView
 from .forms import DeviceCreate
 from django.views.generic.edit import UpdateView
-from django.core.urlresolvers import reverse_lazy
+from django.core.urlresolvers import reverse_lazy, reverse
 from cpplib import hello
+
 class DeviceUpdate(UpdateView):
     model = Device
     fields = '__all__'
     template_name_suffix = '_update_form'
-    success_url = reverse_lazy('device_list')
+    def get_object(self, *args, **kwargs):
+        device = get_object_or_404(Device, pk=self.kwargs['pk'])
+        lol = hello.greet2(self.kwargs['pk'])
+        return device
+    def get_success_url(self, *args, **kwargs):
+        device = get_object_or_404(Device, pk=self.kwargs['pk'])
+        lol = hello.greet2(self.kwargs['pk'])
+        return reverse("xxx", kwargs={'pk':self.kwargs['pk']})
+
+    #     def dispatch(self, request, *args, **kwargs):
+    #         if self.get_object().car_owner != "sometext":
+    #     raise Http404('Car owner does not match.')
+    # return super(NewcarUpdate, self).dispatch(
+    #     request, *args, **kwargs)
 def post_list(request):
     posts = Post.objects.all()
     return render(request, 'blog/post_list.html', {'posts': posts})
@@ -28,7 +42,7 @@ def device_list(request):
     new_devices = list(Device.objects.filter(status='new'))
     rest_devices = list(Device.objects.filter(status='active'))
     devices = new_devices + rest_devices
-    lol = hello.greet()
+    lol = hello.greet('2')
     return render(request, 'blog/device_list.html', {'devices': devices, 'lol': lol})
 def post_new(request):
     form = DeviceCreate()
@@ -47,8 +61,12 @@ def activate(request):
     pictures = File.objects.filter(source_id=pk, file_type='P')
     textfiles = File.objects.filter(source_id=pk, file_type='T')
     return render(request, 'blog/device_info.html', {'device': device, 'pictures': pictures, 'textfiles': textfiles})
-
-
+def photo(request):
+    pk = request.GET['test']
+    device = Device.objects.get(pk=pk)
+    pictures = File.objects.filter(source_id=pk, file_type='P')
+    textfiles = File.objects.filter(source_id=pk, file_type='T')
+    return render(request, 'blog/device_info.html', {'device': device, 'pictures': pictures, 'textfiles': textfiles})
 class AuthorCreate(CreateView):
     model = Device
     fields = '__all__'

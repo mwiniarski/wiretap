@@ -1,5 +1,5 @@
 {% load staticfiles %}
-
+{% load static %}
 <head>
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
@@ -16,11 +16,15 @@
   </blockquote>
 </div>
 
+<img src="{% static "123/a1b2c3" %}">
 <div class="content container">
 
   <p style="font-size: 30pt;"> {{device.name}}</p>
   <p>Uuid: {{ device.uuid }}</p>
-  <a href="#" data-toggle="tooltip" title="Cyk cyk cyk leci foteczka">    <i class="fa fa-camera" style="font-size:120px;color:blue;"></i></a>
+    <form style="display: inline" action="/off/" method="get">
+        <input style="display: inline" type="hidden" name="test" value="{{ device.id }}"></input>
+  <a href="http://127.0.0.1:8000/wiretap/" data-toggle="tooltip" title="Cyk cyk cyk leci foteczka">    <i class="fa fa-camera" style="font-size:120px;color:blue;" type="submit" value="submit"></i></a>
+  </form>
   <p>Status: {{ device.status }}</p>
   <p>Typ: {{ device.device_type }}</p>
 
@@ -53,11 +57,10 @@
 
 
   {% for picture in pictures %}
+
   <span class="col-sm-4">
 <div class="gallery">
-  <a target="_blank" href="{{picture.path}}">
-    <img src="{{picture.path}}" alt="Fjords" width="120" height="120" class="img-thumbnail">
-  </a>
+    <img src="{% static ''%}{{device.uuid}}/{{picture.path}}" width="150" height="150" class="img-thumbnail">
   <div class="desc">{{picture.timestamp}}</div>
 
 
