@@ -65,7 +65,7 @@ public class Serializer {
     public List<byte[]> getRegFrames() {
         List<byte[]> regFrames = new LinkedList<byte[]>();
         byte[] packetFrameUnadjusted = Util.getCurrentAndroidID().getBytes();
-        byte[] transferFrame = {0, 0, 1, (byte)packetFrameUnadjusted.length};
+        byte[] transferFrame = {0, 0, 1, (byte)(packetFrameUnadjusted.length)};
         byte[] packetFrame = new byte[packetSize];
         System.arraycopy(packetFrameUnadjusted, 0, packetFrame, 0, packetFrameUnadjusted.length);
         regFrames.add(transferFrame);
@@ -84,6 +84,7 @@ public class Serializer {
         int counter = 0;
         for (byte[] part:splitFile) {
             sent = sender.sendFrame(part);
+            //Log.i("SendSplitFile", "" + part[0]);
             counter++;
             if(!sent) break;
         }

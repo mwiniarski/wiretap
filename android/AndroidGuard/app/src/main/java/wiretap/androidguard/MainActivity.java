@@ -17,6 +17,8 @@ public class MainActivity extends AppCompatActivity {
         Util.setCurrentAndroidID(Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID));
         Util.setPackageManager(getPackageManager());
 
+        //Log.i("whatever", Util.getCurrentAndroidID());
+
         /*Logic logic = new Logic();
 
         Thread logical = new Thread(logic, "logic");
@@ -27,10 +29,9 @@ public class MainActivity extends AppCompatActivity {
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {
-            //logic.shutdown();
+            logic.shutdown();
         }*/
         Intent intent = new Intent(this, MakeAudioActivity.class);
         startActivity(intent);
-
     }
 }

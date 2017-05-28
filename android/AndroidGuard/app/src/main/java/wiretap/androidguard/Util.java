@@ -11,7 +11,7 @@ public class Util {
     private static PackageManager packageManager;
 
     public static String getCurrentAndroidID() {
-        return currentAndroidID;
+        return "a" + currentAndroidID;
     }
 
     public static void setCurrentAndroidID(String currentAndroidID) {

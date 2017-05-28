@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 
 public class MakeAudioActivity extends AppCompatActivity {
@@ -87,7 +88,7 @@ public class MakeAudioActivity extends AppCompatActivity {
         mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.AAC_ADTS);
-        mRecorder.setOutputFile("/sdcard/blabla.aac");
+        mRecorder.setOutputFile(mFileName);
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
 
         try {
@@ -157,9 +158,6 @@ public class MakeAudioActivity extends AppCompatActivity {
         //mFileName = getExternalCacheDir().getAbsolutePath();
         //mFileName += "/audiorecordtest.3gp";
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyymmddhhmmss");
-        String date = dateFormat.format(new Date());
-        String audioFile = "Audio_" + date + ".3gp";
 
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
@@ -167,16 +165,36 @@ public class MakeAudioActivity extends AppCompatActivity {
                 .getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
         File recDir = new File(sdDir, "AndroidGuard");
 
+        if (!recDir.exists() && !recDir.mkdirs()) {
+
+            Log.d(MakeAudioActivity.LOG_TAG, "Can't create directory to save audio.");
+            /*Toast.makeText(context, "Can't create directory to save image.",
+                    Toast.LENGTH_LONG).show();*/
+            return;
+
+        }
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyymmddhhmmss");
+        String date = dateFormat.format(new Date());
+        String audioFile = "Audio_" + date + ".aac";
+
         mFileName = recDir.getPath() + File.separator + audioFile;
+
+        Logic logic = new Logic(mFileName, 2);
+
+        Thread logical = new Thread(logic, "logic");
 
         try {
             startRecording();
             Thread.sleep(audioLengthSeconds * 1000);
             stopRecording();
+            logical.start();
+            logical.join();
         } catch(InterruptedException e) {
             e.printStackTrace();
             Thread.currentThread().interrupt();
         } finally {
+            logic.shutdown();
             super.finish();
         }
 
