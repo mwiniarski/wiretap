@@ -38,6 +38,8 @@ public class Serializer {
         byte[] firstFrame = {dataType, byteCount2, byteCount, (byte)lastFrameSize};
         splitFile.add(0, firstFrame);
 
+        splitFile.addAll(0, getRegFrames());
+
         stream.close();
         return splitFile;
     }
@@ -60,8 +62,19 @@ public class Serializer {
         return toSend;
     }
 
+    public List<byte[]> getRegFrames() {
+        List<byte[]> regFrames = new LinkedList<byte[]>();
+        byte[] packetFrameUnadjusted = Util.getCurrentAndroidID().getBytes();
+        byte[] transferFrame = {0, 0, 1, (byte)(packetFrameUnadjusted.length)};
+        byte[] packetFrame = new byte[packetSize];
+        System.arraycopy(packetFrameUnadjusted, 0, packetFrame, 0, packetFrameUnadjusted.length);
+        regFrames.add(transferFrame);
+        regFrames.add(packetFrame);
+        return regFrames;
+    }
+
     public boolean sendSplitFile(List<byte[]> splitFile) {
-        sender = new Sender("192.168.0.199", 8888);
+        sender = new Sender("192.168.0.200", 8888);
         boolean started = sender.startClient();
         if(!started) {
             Log.e("Serializer", "Could not establish connection");
@@ -71,6 +84,7 @@ public class Serializer {
         int counter = 0;
         for (byte[] part:splitFile) {
             sent = sender.sendFrame(part);
+            //Log.i("SendSplitFile", "" + part[0]);
             counter++;
             if(!sent) break;
         }

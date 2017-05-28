@@ -7,6 +7,13 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public class Logic implements Runnable {
+    Serializer s;
+    String filePath;
+    int dataType;
+    public Logic(String filePath, int dataType) {
+        this.filePath = filePath;
+        this.dataType = dataType;
+    }
     public void run() {
         /*Connection connection = new Connection("192.168.0.199", 8888);
         connection.startClient();
@@ -30,15 +37,18 @@ public class Logic implements Runnable {
             connection.closeConnection();
         }//wystawic na zewnatrz metode ktora zamyka socket
         //musze miec joina*/
-        Serializer s = new Serializer();
+        s = new Serializer();
         try{
-            List<byte[]> toSend = s.sendFile("whatever.png", (byte)1);
+            List<byte[]> toSend = s.sendFile(filePath, (byte)dataType);
             s.sendSplitFile(toSend);
         } catch (IOException e) {
             e.printStackTrace();
             Log.e("Logic", "The serializer could not put the file through!");
-        } finally {
-            s.senderShutdown();
         }
+
+    }
+
+    public void shutdown() {
+        s.senderShutdown();
     }
 }

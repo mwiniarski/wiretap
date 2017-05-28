@@ -1,7 +1,10 @@
 package wiretap.androidguard;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.provider.Settings.Secure;
+import android.util.Log;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -11,7 +14,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Logic logic = new Logic();
+        Util.setCurrentAndroidID(Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID));
+        Util.setPackageManager(getPackageManager());
+
+        //Log.i("whatever", Util.getCurrentAndroidID());
+
+        /*Logic logic = new Logic();
 
         Thread logical = new Thread(logic, "logic");
         logical.start();
@@ -20,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
             logical.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
+        } finally {
+            logic.shutdown();
+        }*/
+        Intent intent = new Intent(this, MakeAudioActivity.class);
+        startActivity(intent);
     }
 }
