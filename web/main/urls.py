@@ -10,4 +10,5 @@ urlpatterns = [
     url(r'^on/', views.activate, name='on'),
     url(r'^photo/', views.activate, name='photo'),
     url(r'^edit/(?P<pk>[0-9]+)/$', views.DeviceUpdate.as_view(), name='update_device'),
+
 ]

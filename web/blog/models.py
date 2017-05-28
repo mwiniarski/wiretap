@@ -20,13 +20,13 @@ class Post(models.Model):
 
 
 class Device(models.Model):
-    uuid = models.IntegerField()
+    uuid = models.CharField(max_length = 20)
     device_type=models.CharField(max_length = 20)
     status=models.CharField(max_length = 20)
     name=models.CharField(max_length = 30)
     send_cycle_1 =  models.IntegerField()
     send_cycle_2 =  models.IntegerField()
-    
+
 
 class File(models.Model):
     FILE_TYPES=(

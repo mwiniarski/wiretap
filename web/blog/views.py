@@ -8,7 +8,9 @@ from .forms import DeviceCreate
 from django.views.generic.edit import UpdateView
 from django.core.urlresolvers import reverse_lazy, reverse
 from cpplib import hello
-
+# from django.views.static import serve
+# filepath = '/some/path/to/local/file.txt'
+# return serve(request, os.path.basename(filepath), os.path.dirname(filepath))
 class DeviceUpdate(UpdateView):
     model = Device
     fields = '__all__'
@@ -41,7 +43,8 @@ def device_info(request, pk):
 def device_list(request):
     new_devices = list(Device.objects.filter(status='new'))
     rest_devices = list(Device.objects.filter(status='active'))
-    devices = new_devices + rest_devices
+    not_active_devices = list(Device.objects.filter(status='deactivated'))
+    devices = new_devices + rest_devices + not_active_devices
     lol = hello.greet('2')
     return render(request, 'blog/device_list.html', {'devices': devices, 'lol': lol})
 def post_new(request):
@@ -66,7 +69,8 @@ def photo(request):
     device = Device.objects.get(pk=pk)
     pictures = File.objects.filter(source_id=pk, file_type='P')
     textfiles = File.objects.filter(source_id=pk, file_type='T')
-    return render(request, 'blog/device_info.html', {'device': device, 'pictures': pictures, 'textfiles': textfiles})
+    audiofiles = File.objects.filter(source_id=pk, file_type='A')
+    return render(request, 'blog/device_info.html', {'device': device, 'pictures': pictures, 'textfiles': textfiles, 'audiofiles': audiofiles})
 class AuthorCreate(CreateView):
     model = Device
     fields = '__all__'
