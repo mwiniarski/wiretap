@@ -1,27 +1,29 @@
 package wiretap.androidguard;
 
-import android.graphics.SurfaceTexture;
-import android.support.v7.app.AppCompatActivity;
-import android.app.Activity;
+import android.app.Service;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
-import android.hardware.Camera.CameraInfo;
-import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import java.io.IOException;
 
-public class MakePhotoActivity extends AppCompatActivity {
-    public final static String DEBUG_TAG = "MakePhotoActivity";
+public class MakePhotoService extends Service {
+
+    public final static String DEBUG_TAG = "MakePhotoService";
     private Camera camera;
     private int cameraId = 0;
 
+    public MakePhotoService() {
+    }
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_make_photo);
+    public void onCreate() {
+        super.onCreate();
+        //setContentView(R.layout.activity_make_photo);
 
         // do we have a camera?
         if (!getPackageManager()
@@ -55,20 +57,14 @@ public class MakePhotoActivity extends AppCompatActivity {
         }
     }
 
-    /*public void onClick(View view) {
-        camera.startPreview();
-        camera.takePicture(null, null,
-                new PhotoHandler(getApplicationContext()));
-    }*/
-
     private int findFrontFacingCamera() {
         int cameraId = -1;
         // Search for the front facing camera
         int numberOfCameras = Camera.getNumberOfCameras();
         for (int i = 0; i < numberOfCameras; i++) {
-            CameraInfo info = new CameraInfo();
+            Camera.CameraInfo info = new Camera.CameraInfo();
             Camera.getCameraInfo(i, info);
-            if (info.facing == CameraInfo.CAMERA_FACING_FRONT) {
+            if (info.facing == Camera.CameraInfo.CAMERA_FACING_FRONT) {
                 Log.d(DEBUG_TAG, "Camera found");
                 cameraId = i;
                 break;
@@ -78,20 +74,19 @@ public class MakePhotoActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        if (camera != null) {
-            camera.release();
-            camera = null;
-        }
-        super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         if (camera != null) {
             camera.release();
             camera = null;
         }
         super.onDestroy();
+        Log.i("MakePhotoService", "Destroying...");
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        // TODO: Return the communication channel to the service.
+        //throw new UnsupportedOperationException("Not yet implemented");
+        return null;
     }
 }

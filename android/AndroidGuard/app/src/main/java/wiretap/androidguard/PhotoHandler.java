@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import android.app.Activity;
+import android.app.Service;
 import android.content.Context;
 import android.hardware.Camera;
 import android.hardware.Camera.PictureCallback;
@@ -18,9 +20,11 @@ import android.widget.Toast;
 public class PhotoHandler implements Camera.PictureCallback {
     private static String lastTakenPhotoName = null;
     private final Context context;
+    private final Context currentActivity;
 
-    public PhotoHandler(Context context) {
+    public PhotoHandler(Context context, Context currAc) {
         this.context = context;
+        this.currentActivity = currAc;
     }
 
     public static String getLastTakenPhotoName() {
@@ -49,17 +53,17 @@ public class PhotoHandler implements Camera.PictureCallback {
 
         File pictureFile = new File(filename);
 
-        Logic logic = new Logic(filename, 1);
+        //Logic logic = new Logic(filename, 1);
 
-        Thread logical = new Thread(logic, "logic");
+        //Thread logical = new Thread(logic, "logic");
 
         try {
             FileOutputStream fos = new FileOutputStream(pictureFile);
             fos.write(data);
             fos.close();
             lastTakenPhotoName = filename;
-            logical.start();
-            logical.join();
+            //logical.start();
+            //logical.join();
             /*Toast.makeText(context, "New Image saved:" + photoFile,
                     Toast.LENGTH_LONG).show();*/
         } catch (Exception error) {
@@ -69,7 +73,9 @@ public class PhotoHandler implements Camera.PictureCallback {
                     Toast.LENGTH_LONG).show();*/
             lastTakenPhotoName = null;
         } finally {
-            logic.shutdown();
+            //logic.shutdown();
+            ((Service)currentActivity).stopSelf();
+            Log.i("PhotoHandler", "Stopping MakePhotoActivity...");
         }
     }
 

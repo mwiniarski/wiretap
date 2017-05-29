@@ -25,7 +25,7 @@ import java.util.List;
 
 public class MakeAudioActivity extends AppCompatActivity {
 
-    private static final String LOG_TAG = "AudioRecordTest";
+    private static final String LOG_TAG = "MakeAudioActivity";
     private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
     private static String mFileName = null;
     private static int audioLengthSeconds = 5;
@@ -180,21 +180,21 @@ public class MakeAudioActivity extends AppCompatActivity {
 
         mFileName = recDir.getPath() + File.separator + audioFile;
 
-        Logic logic = new Logic(mFileName, 2);
+        //Logic logic = new Logic(mFileName, 2);
 
-        Thread logical = new Thread(logic, "logic");
+        //Thread logical = new Thread(logic, "logic");
 
         try {
             startRecording();
             Thread.sleep(audioLengthSeconds * 1000);
             stopRecording();
-            logical.start();
-            logical.join();
+            //logical.start();
+            //logical.join();
         } catch(InterruptedException e) {
             e.printStackTrace();
             Thread.currentThread().interrupt();
         } finally {
-            logic.shutdown();
+            //logic.shutdown();
             super.finish();
         }
 

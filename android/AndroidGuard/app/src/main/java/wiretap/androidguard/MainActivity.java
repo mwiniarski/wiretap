@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.provider.Settings.Secure;
 import android.util.Log;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,7 +34,19 @@ public class MainActivity extends AppCompatActivity {
         } finally {
             logic.shutdown();
         }*/
-        Intent intent = new Intent(this, MakeAudioActivity.class);
-        startActivity(intent);
+
+        Timer t = new Timer();
+        t.schedule(new TimerTask() {
+
+            @Override
+            public void run() {
+
+                Intent intent = new Intent(MainActivity.this, MakePhotoService.class);
+                startService(intent);
+
+            }
+        }, 5000, 5000);
+        //Intent intent = new Intent(this, MakePhotoActivity.class);
+        //startActivity(intent);
     }
 }
