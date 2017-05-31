@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TestServer
+﻿namespace TestServer
 {
     internal class Program
     {

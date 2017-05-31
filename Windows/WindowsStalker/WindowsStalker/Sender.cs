@@ -27,7 +27,7 @@ namespace WindowsStalker
         private string response;
         private const int _sendTimeout = 5;
         private const int _ackTimeout = 5;
-        private const int _connectionTimeout = 5;
+        private const int _connectionTimeout = 10;
         private int _sendData;
         private bool _ack;
         private bool _connected;
@@ -50,6 +50,7 @@ namespace WindowsStalker
         {
             try
             {
+                connectDone.Reset();
                 _socket = new Socket(AddressFamily.InterNetwork,
                     SocketType.Stream, ProtocolType.Tcp );
 
@@ -189,9 +190,16 @@ namespace WindowsStalker
 
         public void CloseConnection()
         {
-            Console.WriteLine("Socket connection closing...");
-            _socket.Shutdown(SocketShutdown.Both);
-            _socket.Close();
+            try
+            {
+                _socket.Shutdown(SocketShutdown.Both);
+                _socket.Close();
+                Console.WriteLine("Socket closed");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Conncetion already closed!");
+            }
         }
     }
 }
