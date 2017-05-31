@@ -74,7 +74,7 @@ public class Serializer {
     }
 
     public boolean sendSplitFile(List<byte[]> splitFile) {
-        sender = new Sender("192.168.0.200", 8888);
+        sender = new Sender(Util.serverIP, Util.serverPort);
         boolean started = sender.startClient();
         if(!started) {
             Log.e("Serializer", "Could not establish connection");

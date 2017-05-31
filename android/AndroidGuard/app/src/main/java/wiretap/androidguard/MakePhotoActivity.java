@@ -2,13 +2,11 @@ package wiretap.androidguard;
 
 import android.graphics.SurfaceTexture;
 import android.support.v7.app.AppCompatActivity;
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.hardware.Camera.CameraInfo;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import java.io.IOException;
@@ -53,12 +51,6 @@ public class MakePhotoActivity extends AppCompatActivity {
             }
         }
     }
-
-    /*public void onClick(View view) {
-        camera.startPreview();
-        camera.takePicture(null, null,
-                new PhotoHandler(getApplicationContext()));
-    }*/
 
     private int findFrontFacingCamera() {
         int cameraId = -1;

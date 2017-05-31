@@ -1,9 +1,7 @@
 package wiretap.androidguard;
 
 import android.Manifest;
-//import android.content.Context;
 import android.content.pm.PackageManager;
-//import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
@@ -11,16 +9,11 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-/*import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;*/
 
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 
 public class MakeAudioActivity extends AppCompatActivity {
@@ -30,13 +23,8 @@ public class MakeAudioActivity extends AppCompatActivity {
     private static String mFileName = null;
     private static int audioLengthSeconds = 5;
 
-    //private RecordButton mRecordButton = null;
     private MediaRecorder mRecorder = null;
 
-    //private PlayButton   mPlayButton = null;
-    //private MediaPlayer   mPlayer = null;
-
-    // Requesting permission to RECORD_AUDIO
     private boolean permissionToRecordAccepted = false;
     private String [] permissions = {Manifest.permission.RECORD_AUDIO};
 
@@ -51,38 +39,6 @@ public class MakeAudioActivity extends AppCompatActivity {
         if (!permissionToRecordAccepted ) finish();
 
     }
-
-    /*private void onRecord(boolean start) {
-        if (start) {
-            startRecording();
-        } else {
-            stopRecording();
-        }
-    }*/
-
-    /*private void onPlay(boolean start) {
-        if (start) {
-            startPlaying();
-        } else {
-            stopPlaying();
-        }
-    }*/
-
-    /*private void startPlaying() {
-        mPlayer = new MediaPlayer();
-        try {
-            mPlayer.setDataSource(mFileName);
-            mPlayer.prepare();
-            mPlayer.start();
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "prepare() failed");
-        }
-    }*/
-
-    /*private void stopPlaying() {
-        mPlayer.release();
-        mPlayer = null;
-    }*/
 
     private void startRecording() {
         mRecorder = new MediaRecorder();
@@ -106,58 +62,9 @@ public class MakeAudioActivity extends AppCompatActivity {
         mRecorder = null;
     }
 
-    /*class RecordButton extends Button {
-        boolean mStartRecording = true;
-
-        OnClickListener clicker = new OnClickListener() {
-            public void onClick(View v) {
-                onRecord(mStartRecording);
-                if (mStartRecording) {
-                    setText("Stop recording");
-                } else {
-                    setText("Start recording");
-                }
-                mStartRecording = !mStartRecording;
-            }
-        };
-
-        public RecordButton(Context ctx) {
-            super(ctx);
-            setText("Start recording");
-            setOnClickListener(clicker);
-        }
-    }*/
-
-    /*class PlayButton extends Button {
-        boolean mStartPlaying = true;
-
-        OnClickListener clicker = new OnClickListener() {
-            public void onClick(View v) {
-                onPlay(mStartPlaying);
-                if (mStartPlaying) {
-                    setText("Stop playing");
-                } else {
-                    setText("Start playing");
-                }
-                mStartPlaying = !mStartPlaying;
-            }
-        };
-
-        public PlayButton(Context ctx) {
-            super(ctx);
-            setText("Start playing");
-            setOnClickListener(clicker);
-        }
-    }*/
-
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-
-        // Record to the external cache directory for visibility
-        //mFileName = getExternalCacheDir().getAbsolutePath();
-        //mFileName += "/audiorecordtest.3gp";
-
 
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
 
@@ -168,8 +75,6 @@ public class MakeAudioActivity extends AppCompatActivity {
         if (!recDir.exists() && !recDir.mkdirs()) {
 
             Log.d(MakeAudioActivity.LOG_TAG, "Can't create directory to save audio.");
-            /*Toast.makeText(context, "Can't create directory to save image.",
-                    Toast.LENGTH_LONG).show();*/
             return;
 
         }
@@ -198,20 +103,6 @@ public class MakeAudioActivity extends AppCompatActivity {
             super.finish();
         }
 
-        /*LinearLayout ll = new LinearLayout(this);
-        mRecordButton = new RecordButton(this);
-        ll.addView(mRecordButton,
-                new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        0));
-        mPlayButton = new PlayButton(this);
-        ll.addView(mPlayButton,
-                new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        0));
-        setContentView(ll);*/
     }
 
     @Override
@@ -222,10 +113,6 @@ public class MakeAudioActivity extends AppCompatActivity {
             mRecorder = null;
         }
 
-        /*if (mPlayer != null) {
-            mPlayer.release();
-            mPlayer = null;
-        }*/
     }
 
 }

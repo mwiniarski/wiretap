@@ -26,5 +26,9 @@ public class Util {
         Util.packageManager = packageManager;
     }
 
+    public static String serverIP = "172.20.10.5";
+
+    public static int serverPort = 8888;
+
 
 }

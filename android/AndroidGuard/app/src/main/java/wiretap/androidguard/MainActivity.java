@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.provider.Settings.Secure;
-import android.util.Log;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -17,13 +16,11 @@ public class MainActivity extends AppCompatActivity {
         Util.setCurrentAndroidID(Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID));
         Util.setPackageManager(getPackageManager());
 
-        //Log.i("whatever", Util.getCurrentAndroidID());
-
         /*Logic logic = new Logic();
 
         Thread logical = new Thread(logic, "logic");
         logical.start();
-//tu tez join
+
         try {
             logical.join();
         } catch (InterruptedException e) {
